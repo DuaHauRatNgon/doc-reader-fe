@@ -1,0 +1,28 @@
+.sidebar-section {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.sidebar-section h3 {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.document-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.document-item {
+  margin-bottom: 1em;
+}
+
+.document-title {
+  font-weight: bold;
+}
+
+.document-meta {
+  font-size: 0.8em;
+  color: gray;
+}

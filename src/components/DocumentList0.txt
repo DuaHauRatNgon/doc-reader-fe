@@ -1,0 +1,32 @@
+import React, { useEffect, useState } from 'react';
+import { getAllDocuments, deleteDocument } from '../api/documentApi';
+import { Link } from 'react-router-dom';
+
+function DocumentList() {
+  const [documents, setDocuments] = useState([]);
+
+  useEffect(() => {
+    getAllDocuments().then(res => setDocuments(res.data));
+  }, []);
+
+  const handleDelete = async (id) => {
+    await deleteDocument(id);
+    setDocuments(documents.filter(doc => doc.id !== id));
+  };
+
+  return (
+    <div>
+      <h2>All Documents</h2>
+      <ul>
+        {documents.map(doc => (
+          <li key={doc.id}>
+            <Link to={`/documents/${doc.id}`}>{doc.title}</Link>
+            <button onClick={() => handleDelete(doc.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default DocumentList;
