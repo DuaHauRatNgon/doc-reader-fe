@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadDocument } from '../api/documentApi';
+import { uploadDocument } from '../../../api/documentApi';
 import './DocumentUpload.css'; 
 
 function DocumentUpload() {

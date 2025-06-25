@@ -7,6 +7,7 @@ import BookInfo from '../components/BookDetail/BookInfo';
 import BookActions from '../components/BookDetail/BookActions';
 import BookComments from '../components/BookDetail/BookComments';
 import RelatedBooks from '../components/BookDetail/RelatedBooks';
+import PageWithSidebar from '../components/layout/PageWithSidebar';
 
 const DocumentDetail = () => {
   const { id } = useParams();
@@ -33,7 +34,7 @@ const DocumentDetail = () => {
   if (!book) return <p>Không tìm thấy sách.</p>;
 
   return (
-    <div style={{ padding: '1rem', border: '1px solid black', margin: '1rem' }}>
+    <PageWithSidebar contentStyle={{ padding: '1rem' }}>
       <div style={{ border: '1px solid black', padding: '0.5rem', marginBottom: '1rem' }}>
         <Breadcrumb bookTitle={book.title} />
       </div>
@@ -54,7 +55,7 @@ const DocumentDetail = () => {
       <div style={{ border: '1px solid black', marginTop: '1rem', padding: '1rem' }}>
         <RelatedBooks bookId={book.id} />
       </div>
-    </div>
+    </PageWithSidebar>
   );
 };
 

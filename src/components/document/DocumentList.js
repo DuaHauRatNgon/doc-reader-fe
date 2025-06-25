@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { getAllDocuments, deleteDocument } from '../api/documentApi';
+import { getAllDocuments, deleteDocument } from '../../api/documentApi';
 import { Link } from 'react-router-dom';
+import Sidebar from '../Sidebar/Sidebar';
+
 function DocumentList() {
   const [documents, setDocuments] = useState([]);
   
-    useEffect(() => {
+  useEffect(() => {
     getAllDocuments().then(res => setDocuments(res.data));
   }, []);
-
 
   const handleDelete = async (id) => {
     setDocuments(documents.filter(doc => doc.id !== id));
@@ -20,34 +21,7 @@ function DocumentList() {
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       
-      {/* Top Navbar */}
-      <div style={{ 
-        display: 'flex', 
-        border: '2px solid #000',
-        height: '60px'
-      }}>
-        <div style={{ 
-          flex: 1, 
-          border: '1px solid #000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '18px',
-          fontWeight: 'bold'
-        }}>
-          navbar
-        </div>
-        <div style={{ 
-          width: '150px',
-          border: '1px solid #000',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '16px'
-        }}>
-          tài khoản
-        </div>
-      </div>
+    
 
       {/* Main Content Area */}
       <div style={{ 
@@ -58,38 +32,7 @@ function DocumentList() {
       }}>
         
         {/* Left Sidebar */}
-        <div style={{ 
-          width: '200px',
-          border: '1px solid #000',
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-          {/* Xem nhiều */}
-          <div style={{ 
-            flex: 1,
-            border: '1px solid #000',
-            padding: '15px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px'
-          }}>
-            xem nhiều
-          </div>
-          
-          {/* Mới cập nhật */}
-          <div style={{ 
-            flex: 1,
-            border: '1px solid #000',
-            padding: '15px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px'
-          }}>
-            mới cập nhật
-          </div>
-        </div>
+        <Sidebar />
 
         {/* Main Document Grid */}
         <div style={{ 
@@ -122,10 +65,21 @@ function DocumentList() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '10px',
-                  fontSize: '14px',
-                  color: '#666'
+                  overflow: 'hidden'
                 }}>
-                  ảnh
+                  {doc.thumbnailUrl ? (
+                    <img 
+                      src={doc.thumbnailUrl} 
+                      alt={doc.title}
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover' 
+                      }}
+                    />
+                  ) : (
+                    <span style={{ fontSize: '14px', color: '#666' }}>ảnh</span>
+                  )}
                 </div>
 
                 {/* Title */}
@@ -192,8 +146,7 @@ function DocumentList() {
                   display: 'flex',
                   gap: '8px'
                 }}>
-                  <button
-                   style={{ 
+                  <button style={{ 
                     flex: 1,
                     padding: '4px 8px',
                     fontSize: '12px',
@@ -201,8 +154,9 @@ function DocumentList() {
                     backgroundColor: 'white',
                     cursor: 'pointer'
                   }}>
-                     <Link to={`/documents/${doc.id}`}>Đọc</Link>
-                    
+                    <Link to={`/documents/${doc.id}`}>Đọc</Link>
+                    <Link to={`/documents/detail/${doc.id}`}>Xem thêm</Link>
+
                   </button>
                   <button 
                     onClick={() => handleBookmark(doc.id)}

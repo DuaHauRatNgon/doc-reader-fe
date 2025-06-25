@@ -113,7 +113,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPagesBase64 } from '../api/documentApi';
-import PdfPageViewer from '../components/PdfPageViewer';
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import PdfPageViewer from '../components/reader/PdfPageViewer';
+import PageWithSidebar from '../components/layout/PageWithSidebar';
+import CommentSection from '../components/Comment/CommentSection';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
 export default function DocumentDetail() {
   const { id } = useParams();
@@ -153,14 +160,16 @@ export default function DocumentDetail() {
 
   if (loading) {
     return (
-      <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', padding: '2rem' }}>
-        <p>Đang tải tài liệu...</p>
-      </div>
+      <PageWithSidebar>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <p>Đang tải tài liệu...</p>
+        </div>
+      </PageWithSidebar>
     );
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: '0 auto', fontFamily: 'sans-serif' }}>
+    <PageWithSidebar contentStyle={{ padding: '20px' }}>
       <h2>Chi tiết tài liệu</h2>
       
       {error && (
@@ -263,6 +272,9 @@ export default function DocumentDetail() {
           </div>
         </>
       )}
-    </div>
+
+      {/* Comment section */}
+      <CommentSection documentId={id} title="Bình luận về tài liệu" />
+    </PageWithSidebar>
   );
 }

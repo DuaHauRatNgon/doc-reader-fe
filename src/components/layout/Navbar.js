@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { Search, User, Menu, X, Home, BookOpen, LogIn, LogOut, Settings } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import NotificationList from '../Notification/NotificationList'; 
+import NotificationBell from '../Notification/NotificationBell';
 
-const Navbar = ({ 
-  user = null, // null nếu chưa login, object nếu đã login
+
+const Navbar = ({
+  user = null, 
   categories = [],
   onLogin,
   onLogout,
@@ -12,6 +16,7 @@ const Navbar = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -25,6 +30,11 @@ const Navbar = ({
       onCategorySelect(category);
     }
     setIsMenuOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+    setIsUserMenuOpen(false);
   };
 
   return (
@@ -44,7 +54,7 @@ const Navbar = ({
         maxWidth: '1200px',
         margin: '0 auto'
       }}>
-        
+
         {/* Logo/Brand */}
         <div style={{
           display: 'flex',
@@ -65,7 +75,7 @@ const Navbar = ({
           flex: 1,
           justifyContent: 'center'
         }} className="desktop-nav">
-          
+
           {/* Home Link */}
           <a href="/" style={{
             textDecoration: 'none',
@@ -77,8 +87,8 @@ const Navbar = ({
             border: '1px solid transparent',
             borderRadius: '4px'
           }}
-          onMouseOver={(e) => e.target.style.border = '1px solid #000'}
-          onMouseOut={(e) => e.target.style.border = '1px solid transparent'}
+            onMouseOver={(e) => e.target.style.border = '1px solid #000'}
+            onMouseOut={(e) => e.target.style.border = '1px solid transparent'}
           >
             <Home size={16} />
             Trang chủ
@@ -101,7 +111,7 @@ const Navbar = ({
               Thể loại
               <span style={{ fontSize: '12px' }}>▼</span>
             </button>
-            
+
             {isMenuOpen && (
               <div style={{
                 position: 'absolute',
@@ -171,6 +181,8 @@ const Navbar = ({
           </div>
         </div>
 
+          <NotificationBell />
+
         {/* User Account Section */}
         <div style={{ position: 'relative' }}>
           {user ? (
@@ -192,7 +204,7 @@ const Navbar = ({
                 {user.name || user.username}
                 <span style={{ fontSize: '12px' }}>▼</span>
               </button>
-              
+
               {isUserMenuOpen && (
                 <div style={{
                   position: 'absolute',
@@ -204,10 +216,7 @@ const Navbar = ({
                   zIndex: 1001
                 }}>
                   <div
-                    onClick={() => {
-                      // Navigate to profile
-                      setIsUserMenuOpen(false);
-                    }}
+                    onClick={handleProfileClick}
                     style={{
                       padding: '10px 15px',
                       cursor: 'pointer',
@@ -224,9 +233,10 @@ const Navbar = ({
                   </div>
                   <div
                     onClick={() => {
-                      if (onLogout) onLogout();
+                      onLogout?.();
                       setIsUserMenuOpen(false);
                     }}
+
                     style={{
                       padding: '10px 15px',
                       cursor: 'pointer',
@@ -245,22 +255,23 @@ const Navbar = ({
               )}
             </div>
           ) : (
-            // Not logged in
-            <button
-              onClick={onLogin}
-              style={{
-                border: '1px solid #000',
-                background: '#fff',
-                padding: '8px 16px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}
-            >
-              <LogIn size={16} />
-              Đăng nhập
-            </button>
+            <>
+              <button
+                onClick={() => navigate('/login')}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <LogIn size={16} />
+                Đăng nhập
+              </button>
+              <button
+                onClick={() => navigate('/register')}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <User size={16} />
+                Đăng ký
+              </button>
+            </>
+
           )}
         </div>
 
@@ -297,7 +308,7 @@ const Navbar = ({
           }}>
             🏠 Trang chủ
           </a>
-          
+
           <div style={{ padding: '10px 20px', fontWeight: 'bold', borderBottom: '1px solid #eee' }}>
             📚 Thể loại:
           </div>
@@ -314,7 +325,7 @@ const Navbar = ({
               {category.name}
             </div>
           ))}
-          
+
           <div style={{ padding: '10px 20px' }}>
             <div style={{ display: 'flex' }}>
               <input
@@ -333,7 +344,7 @@ const Navbar = ({
                   flex: 1
                 }}
               />
-              <button 
+              <button
                 onClick={handleSearch}
                 style={{
                   border: '1px solid #000',
@@ -369,7 +380,7 @@ const Navbar = ({
 // Demo component để test
 const NavbarDemo = () => {
   const [user, setUser] = useState(null);
-  
+
   const mockCategories = [
     { id: 1, name: 'Văn học' },
     { id: 2, name: 'Khoa học' },
@@ -407,13 +418,13 @@ const NavbarDemo = () => {
         onSearch={handleSearch}
         onCategorySelect={handleCategorySelect}
       />
-      
+
       <div style={{ padding: '20px', textAlign: 'center' }}>
         <h1>  slide... </h1>
-     
+
       </div>
     </div>
   );
 };
 
-export default NavbarDemo;
+export default Navbar;

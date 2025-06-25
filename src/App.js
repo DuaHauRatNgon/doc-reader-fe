@@ -1,35 +1,27 @@
-// import React from 'react';
-// import { BrowserRouter } from 'react-router-dom';
-// import AppRoutes from './routes';
-
-// function App() {
-//   return (
-//     <BrowserRouter>
-//       <AppRoutes />
-//     </BrowserRouter>
-//   );
-// }
-
-// export default App;
-
-
-// src/App.js  
-import React from 'react';
+// src/App.js
 import { BrowserRouter } from 'react-router-dom';
 import Layout from './layout/Layout';
 import AppRoutes from './routes/routes';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 
+function AppContent() {
+  const { user, logout } = useAuth();
 
-// import HomePage from './pages/HomePage';
-// import DocumentListPage from './pages/DocumentListPage';
-// // ... other imports
+  return (
+    <>
+      <Layout user={user} onLogout={logout} />
+      <AppRoutes />
+    </>
+  );
+}
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-          <AppRoutes />
-      </Layout>
+      <AuthProvider>
+          <AppContent />
+      </AuthProvider>
     </BrowserRouter>
   );
 }
